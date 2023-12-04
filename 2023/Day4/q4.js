@@ -38,31 +38,23 @@ function part2() {
   for (let card of arr) {
     let c = card.split(":");
     let pair = c[1].split("|");
-    let c_split = c[0].split(" ");
-    c_split = c_split.filter((x) => x !== "");
-
-    let str = `${c_split[0].trim()} ${c_split[1].trim()}`
+    let str = c[0].split(" ").filter((x) => x !== "").join(" ");
 
     pairs[str] = { copies: 1, win: 0, change: [] };
     let winning = pair[0].split(" ");
     let potential = pair[1].split(" ");
-    let total = 0;
 
     for (let num of potential) {
       if (winning.includes(num.trim()) && num !== '') {
-        total += 1;
+        pairs[str]["win"] += 1;
       }
     }
 
-    pairs[str]["win"] = total;
-    let indexes = [];
-    for (let i = 1; i < total + 1; i++) {
-      if (i === arr.length + 1) {
-        break;
-      }
-      indexes.push(parseInt(str.split(" ")[1]) + i);
+    let i = 1;
+    while (i < pairs[str]["win"] + 1 && i < arr.length + 1) {
+      pairs[str]["change"].push(parseInt(str.split(" ")[1]) + i);
+      i += 1;
     }
-    pairs[str]["change"] = indexes;
   }
 
   for (let card in pairs) {
